@@ -13,4 +13,8 @@ jobs:
         with:
           ruby-version: 3.2
 
-      - run: ruby -Ilib:test test/*.rb
+      - name: Install asciidoctor
+        run: gem install asciidoctor
+
+      - name: Run tests
+        run: ruby -Ilib:test test/*.rb
