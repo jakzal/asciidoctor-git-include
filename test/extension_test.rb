@@ -39,16 +39,10 @@ include::git@chapter01.adoc[repository=#{dir}]
 
   def given_file_committed_to_fresh_repo(file_name)
     dir = Dir.mktmpdir("asciidoctor-git-include-tests-", "/tmp")
-    ENV['GIT_AUTHOR_NAME'] = "Test"
-    ENV['GIT_AUTHOR_EMAIL'] = "test@example.com"
-    ENV['GIT_COMMITTER_EMAIL'] = "test@example.com"
     at_exit {
-      ENV.delete('GIT_AUTHOR_NAME')
-      ENV.delete('GIT_AUTHOR_EMAIL')
-      ENV.delete('GIT_COMMITTER_EMAIL')
       FileUtils.remove_entry(dir)
     }
-    cmd = %(git init -q #{dir} && echo 'Other repo.' > #{dir}/#{file_name} && git -C #{dir} add #{dir} && git -C #{dir} commit -m 'Initialise the repo')
+    cmd = %(git init -q #{dir} && git -C #{dir} config --local user.email test@example.com && git -C #{dir} config --local user.name Test && echo 'Other repo.' > #{dir}/#{file_name} && git -C #{dir} add #{dir} && git -C #{dir} commit -m 'Initialise the repo')
     %x{#{cmd}}
     dir
   end
