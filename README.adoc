@@ -1,0 +1,77 @@
+= AsciiDoctor Git includes extension
+ifndef::env-github[:icons: font]
+ifdef::env-github[]
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+
+An AsciiDoctor extension that enables file includes from Git repositories.
+It only affects `include` directives for URIs beginning with `git@`.
+
+== Requirements
+
+`git` command is available in `PATH`.
+
+== Installation
+
+With Ruby Gems:
+
+    gem install asciidoctor-git-include
+
+== Usage
+
+=== Command line
+
+Load the extension:
+
+    asciidoctor -r asciidoctor-git-include [index.adoc]
+
+Then, inside your AsciiDoc file, use an `include` statement like normal, pointing to an URI that begins with `git@`.
+
+=== Supported attributes
+
+* `repository` - path to the Git repository (default: `.`)
+* `revision` - repository revision to use (default: `HEAD`)
+
+// tag::examples[]
+
+== Examples
+
+=== Basic
+
+Save this one-line Asciidoc file as `README.adoc`:
+
+----
+\include::git@README.adoc[]
+----
+
+Then run
+
+    asciidoctor -r asciidoctor-git-include README.adoc
+
+and open `README.html` in your browser.
+
+=== Changing the repository and revision
+
+----
+\include::git@README.adoc[repository=/path/to/repository,revision=dbe7eb05972d24eb153495b543fe5ba0b362b0b1]
+----
+
+=== Changing the branch
+
+----
+\include::git@README.adoc[revision=develop]
+----
+
+=== Changing the path
+
+Paths within the repository work as usual:
+
+----
+\include::git@path/within/repo/file.rb[]
+----
+
+// end::examples[]
