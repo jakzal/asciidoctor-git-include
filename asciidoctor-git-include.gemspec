@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name          = "asciidoctor-git-include"
-  s.version       = "1.0.0"
+  s.version       = "1.1.0"
   s.authors       = ["Jakub Zalas"]
   s.email         = ["jakub@zalas.pl"]
   s.description   = %q{Asciidoctor extension for including files from Git repositories}
