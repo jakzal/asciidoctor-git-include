@@ -9,5 +9,4 @@ Gem::Specification.new do |s|
   s.license       = "MIT"
   s.files         = "lib/asciidoctor-git-include.rb"
   s.add_runtime_dependency "asciidoctor", "~> 2.0"
-  s.add_development_dependency 'rspec', '~> 3.12'
 end
