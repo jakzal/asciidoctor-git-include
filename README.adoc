@@ -35,6 +35,7 @@ Then, inside your AsciiDoc file, use an `include` statement like normal, pointin
 
 * `repository` - path to the Git repository (default: `.`)
 * `revision` - repository revision to use (default: `HEAD`)
+* `lines` - specify the lines to include (i.e. `lines=2..5;10;12`)
 
 // tag::examples[]
 
@@ -72,6 +73,12 @@ Paths within the repository work as usual:
 
 ----
 \include::git@path/within/repo/file.rb[]
+----
+
+=== Specifying lines to include
+
+----
+\include::git@README.adoc[lines=2..5;10;12]
 ----
 
 // end::examples[]

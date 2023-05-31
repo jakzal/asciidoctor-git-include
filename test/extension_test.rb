@@ -35,6 +35,21 @@ include::git@chapter01.adoc[repository=#{dir}]
 
       assert_match(/Other repo\./, output)
     end
+
+    test 'it includes selected lines from a file in the git repository' do
+      input = <<-EOS
+include::git@test/fixtures/multiline.adoc[lines=2..3;5]
+      EOS
+
+      output = render_embedded_string input
+
+      refute_match(/Line 1\./, output)
+      assert_match(/Line 2\./, output)
+      assert_match(/Line 3\./, output)
+      refute_match(/Line 4\./, output)
+      assert_match(/Line 5\./, output)
+      refute_match(/Line 6\./, output)
+    end
   end
 
   def given_file_committed_to_fresh_repo(file_name)
