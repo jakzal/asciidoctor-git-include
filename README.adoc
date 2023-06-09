@@ -44,6 +44,9 @@ Then, inside your AsciiDoc file, use an `include` statement like normal, pointin
 
 == Examples
 
+Examples with actual rendered output can be found on https://jakzal.github.io/asciidoctor-git-include/.
+The source is taken from xref:examples/index.adoc[].
+
 === Basic
 
 Save this one-line Asciidoc file as `README.adoc`:
