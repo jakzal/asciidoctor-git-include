@@ -558,11 +558,161 @@ pre.rouge .gs {
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
+<li><a href="#_including_a_file_from_git">Including a file from git</a></li>
+<li><a href="#_including_a_diff_from_git">Including a diff from git</a></li>
+<li><a href="#_including_a_diff_between_any_two_revisions">Including a diff between any two revisions</a></li>
+<li><a href="#_including_code_or_diff_from_a_different_repository">Including code or diff from a different repository</a></li>
 <li><a href="#_building_this_page">Building this page</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
+<div class="sect1">
+<h2 id="_including_a_file_from_git">Including a file from git</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Here&#8217;s how to include the code from the first commit (revision <code>fdc094c892b</code>) to <code>lib/asciidoctor-git-include.rb</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="asciidoc">.lib/asciidoctor-git-include.rb
+[source,ruby]
+----
+include::git@lib/asciidoctor-git-include.rb[revision=fdc094c892b,lines=5;11..24]
+----</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The above code, when embedded in an asciidoc, will render selected lines from the file in the specified revision:</p>
+</div>
+<div class="listingblock">
+<div class="title">lib/asciidoctor-git-include.rb</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="ruby"><span class="k">class</span> <span class="nc">GitIncludeMacro</span> <span class="o">&lt;</span> <span class="no">Asciidoctor</span><span class="o">::</span><span class="no">Extensions</span><span class="o">::</span><span class="no">IncludeProcessor</span>
+
+  <span class="k">def</span> <span class="nf">process</span> <span class="n">doc</span><span class="p">,</span> <span class="n">reader</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">attributes</span>
+    <span class="n">target</span><span class="p">.</span><span class="nf">slice!</span> <span class="s2">"git@"</span>
+    <span class="n">repository</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span><span class="s1">'repository'</span><span class="p">,</span> <span class="s1">'.'</span><span class="p">)</span>
+    <span class="n">revision</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span><span class="s1">'revision'</span><span class="p">,</span> <span class="s1">'HEAD'</span><span class="p">)</span>
+
+    <span class="n">cmd</span> <span class="o">=</span> <span class="sx">%(git -C </span><span class="si">#{</span><span class="n">repository</span><span class="si">}</span><span class="sx"> show </span><span class="si">#{</span><span class="n">revision</span><span class="si">}</span><span class="sx">:</span><span class="si">#{</span><span class="n">target</span><span class="si">}</span><span class="sx">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="sx">%x(</span><span class="si">#{</span><span class="n">cmd</span><span class="si">}</span><span class="sx">)</span>
+
+    <span class="n">reader</span><span class="p">.</span><span class="nf">push_include</span> <span class="n">content</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">attributes</span>
+    <span class="n">reader</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>revision</code> is optional (<code>HEAD</code> is the default) as well as the <code>lines</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_including_a_diff_from_git">Including a diff from git</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Include the diff from the second commit (revision <code>d64d85e37b4</code>) to its preceding revision of <code>lib/asciidoctor-git-include.rb</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="asciidoc">.Changes introduced in d64d85e37b4
+[source,patch]
+----
+include::git@lib/asciidoctor-git-include.rb[revision=d64d85e37b4,diff,lines=7..17]
+----</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The above code will render:</p>
+</div>
+<div class="listingblock">
+<div class="title">Changes introduced in d64d85e37b4</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="patch">     repository = attributes.fetch('repository', '.')
+     revision = attributes.fetch('revision', 'HEAD')
+<span class="gi">+    lines = attributes.fetch('lines', '')
+</span> 
+     cmd = %(git -C #{repository} show #{revision}:#{target})
+     content = %x(#{cmd})
+ 
+<span class="gi">+    content = process_line_selection(content, lines) unless lines == ""
++
+</span>     reader.push_include content, target, target, 1, attributes
+     reader</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_including_a_diff_between_any_two_revisions">Including a diff between any two revisions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Include the diff between two revisions (<code>e3b17ded3</code> and <code>d64d85e37b4</code>) of <code>lib/asciidoctor-git-include.rb</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="asciidoc">.Changes between e3b17ded3 and d64d85e37b4
+[source,patch]
+----
+include::git@lib/asciidoctor-git-include.rb[revision=e3b17ded3,diff=d64d85e37b4,lines=6..18]
+----</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The above code will render:</p>
+</div>
+<div class="listingblock">
+<div class="title">Changes between e3b17ded3 and d64d85e37b4</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="patch">     repository = attributes.fetch('repository', '.')
+     revision = attributes.fetch('revision', 'HEAD')
+     lines = attributes.fetch('lines', '')
+<span class="gi">+    as_diff = attributes.value?('diff') || attributes.key?('diff')
++    diff_revision = attributes.fetch('diff', "#{revision}~1")
+</span> 
+     cmd = %(git -C #{repository} show #{revision}:#{target})
+<span class="gi">+    if (as_diff)
++      cmd = %(git -C #{repository} diff #{diff_revision}:#{target} #{revision}:#{target})
++    end
+</span>     content = %x(#{cmd})
+ 
+     content = process_line_selection(content, lines) unless lines == ""</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_including_code_or_diff_from_a_different_repository">Including code or diff from a different repository</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>repository</code> attribute can be given to point to an external repository location.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="asciidoc">.lib/asciidoctor-git-include.rb
+[source,ruby]
+----
+include::git@lib/asciidoctor-git-include.rb[revision=fdc094c892b,lines=5;24,repository=.]
+----</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The above code will render:</p>
+</div>
+<div class="listingblock">
+<div class="title">lib/asciidoctor-git-include.rb</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="ruby"><span class="k">class</span> <span class="nc">GitIncludeMacro</span> <span class="o">&lt;</span> <span class="no">Asciidoctor</span><span class="o">::</span><span class="no">Extensions</span><span class="o">::</span><span class="no">IncludeProcessor</span>
+<span class="k">end</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The example uses the current repository location for practical reasons, but any local filesystem location should work.</p>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_building_this_page">Building this page</h2>
 <div class="sectionbody">
@@ -660,7 +810,7 @@ gem <span class="nb">install </span>asciidoctor-git-include-<span class="k">*</s
 <div id="footer">
 <div id="footer-text">
 Version 1.2.0<br>
-Last updated 2023-06-09 19:23:04 UTC
+Last updated 2023-06-09 20:09:04 UTC
 </div>
 </div>
 </body>
