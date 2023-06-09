@@ -58,6 +58,13 @@ gem install asciidoctor rouge
 gem build asciidoctor-git-include.gemspec
 gem install asciidoctor-git-include-*.gem
 ----
++
+This will the development version. To install the version published to ruby gems run the following command instead:
++
+[source,bash]
+----
+gem install asciidoctor-git-include
+----
 
 . Build the page
 +
