@@ -20,3 +20,29 @@ jobs:
 
       - name: Run tests
         run: ruby -Ilib:test test/*.rb
+
+  publish-docs:
+    name: Publish docs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout project sources
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Build the docker image
+        run: docker build -t jakzal/asciidoctor .
+
+      - name: Build docs
+        run: |
+          version=$(cat asciidoctor-git-include.gemspec | grep 's.version' | sed -e 's/[^"]*"\([^"]*\)".*/\1/g')
+          sed -i'' -e 's/v1.0.0/v'$version'/g' examples/index.adoc
+          docker run -t --rm --name docs -u "$(id -u):$(id -g)" -v $(pwd):/project -w /project jakzal/asciidoctor asciidoctor -r asciidoctor-git-include examples/index.adoc -o examples/index.html
+
+      - name: Deploy docs
+        if: github.ref == 'refs/heads/main'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: examples
