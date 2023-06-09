@@ -38,7 +38,7 @@ Then, inside your AsciiDoc file, use an `include` statement like normal, pointin
 * `repository` - path to the Git repository (default: `.`)
 * `revision` - repository revision to use (default: `HEAD`)
 * `lines` - specify the lines to include (i.e. `lines=2..5;10;12`)
-* `diff` - include a patch for the given revision
+* `diff` - include a patch for the given `revision`, or between two revisions (see examples)
 
 // tag::examples[]
 
@@ -86,8 +86,18 @@ Paths within the repository work as usual:
 
 === Including a patch for a specific revision
 
+To generate a patch for changes introduced in a specific revision (b015e8dd):
+
 ----
 \include::git@path/within/repo/file.rb[revision=b015e8dd,diff]
+----
+
+=== Including a patch for specific revisions
+
+To generate a patch for changes between two revisions (b015e8dd and b015e8dd):
+
+----
+\include::git@path/within/repo/file.rb[revision=b015e8dd,diff=0245ac72]
 ----
 
 // end::examples[]

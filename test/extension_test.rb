@@ -93,6 +93,18 @@ include::git@chapter01.adoc[repository=#{dir},diff]
       assert_match(/-Other repo\./, output)
       assert_match(/\+Other repo updated\./, output)
     end
+
+    test 'it includes a diff for specific revisions of a file' do
+      input = <<-EOS
+include::git@test/fixtures/ruby.rb[revision=890064c2ee5310fdc4ffec0cffa0e41a258e5b27,diff=0245ac72b958e268b6b28c6c85b524a69021b61c]
+      EOS
+
+      output = render_embedded_string input
+
+      assert_match(/diff --git a\/test\/fixtures\/ruby.rb b\/test\/fixtures\/ruby.rb/, output)
+      assert_match(/-messages = \["Hello"\]/, output)
+      assert_match(/\+messages = \["Hello", "World", "!!!"\]/, output)
+    end
   end
 
   def given_file_committed_to_fresh_repo(file_name, content)
