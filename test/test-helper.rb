@@ -26,7 +26,7 @@ class Minitest::Test
   end
 
   def render_embedded_string(src, opts = {})
-    opts[:header_footer] = false
+    opts[:standalone] = false
     document_from_string(src, opts).render
   end
 
