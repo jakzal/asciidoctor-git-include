@@ -17,7 +17,7 @@ git clone https://github.com/jakzal/asciidoctor-git-include.git
 cd asciidoctor-git-include
 ----
 
-Next, choose wether you'd like to use Docker or build the gem directly on your OS.
+Next, choose whether you'd like to use Docker or build the gem directly on your OS.
 Continue with one of the sections that follow.
 
 === Docker
