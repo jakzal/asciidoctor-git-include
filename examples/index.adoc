@@ -7,6 +7,94 @@ v1.0.0
 :data-uri:
 :source-highlighter: rouge
 
+== Including a file from git
+
+Here's how to include the code from the first commit (revision `fdc094c892b`) to `lib/asciidoctor-git-include.rb`:
+
+[source,asciidoc]
+....
+.lib/asciidoctor-git-include.rb
+[source,ruby]
+----
+\include::git@lib/asciidoctor-git-include.rb[revision=fdc094c892b,lines=5;11..24]
+----
+....
+
+The above code, when embedded in an asciidoc, will render selected lines from the file in the specified revision:
+
+.lib/asciidoctor-git-include.rb
+[source,ruby]
+----
+include::git@lib/asciidoctor-git-include.rb[revision=fdc094c892b,lines=5;11..24]
+----
+
+The `revision` is optional (`HEAD` is the default) as well as the `lines`.
+
+== Including a diff from git
+
+Include the diff from the second commit (revision `d64d85e37b4`) to its preceding revision of `lib/asciidoctor-git-include.rb`:
+
+[source,asciidoc]
+....
+.Changes introduced in d64d85e37b4
+[source,patch]
+----
+\include::git@lib/asciidoctor-git-include.rb[revision=d64d85e37b4,diff,lines=7..17]
+----
+....
+
+The above code will render:
+
+.Changes introduced in d64d85e37b4
+[source,patch]
+----
+include::git@lib/asciidoctor-git-include.rb[revision=d64d85e37b4,diff,lines=7..17]
+----
+
+== Including a diff between any two revisions
+
+Include the diff between two revisions (`e3b17ded3` and `d64d85e37b4`) of `lib/asciidoctor-git-include.rb`:
+
+[source,asciidoc]
+....
+.Changes between e3b17ded3 and d64d85e37b4
+[source,patch]
+----
+\include::git@lib/asciidoctor-git-include.rb[revision=e3b17ded3,diff=d64d85e37b4,lines=6..18]
+----
+....
+
+The above code will render:
+
+.Changes between e3b17ded3 and d64d85e37b4
+[source,patch]
+----
+include::git@lib/asciidoctor-git-include.rb[revision=e3b17ded3,diff=d64d85e37b4,lines=6..18]
+----
+
+== Including code or diff from a different repository
+
+The `repository` attribute can be given to point to an external repository location.
+
+[source,asciidoc]
+....
+.lib/asciidoctor-git-include.rb
+[source,ruby]
+----
+\include::git@lib/asciidoctor-git-include.rb[revision=fdc094c892b,lines=5;24,repository=.]
+----
+....
+
+The above code will render:
+
+.lib/asciidoctor-git-include.rb
+[source,ruby]
+----
+include::git@lib/asciidoctor-git-include.rb[revision=fdc094c892b,lines=5;23,repository=.]
+----
+
+The example uses the current repository location for practical reasons, but any local filesystem location should work.
+
 == Building this page
 
 Clone the repository.
