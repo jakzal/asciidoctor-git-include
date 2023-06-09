@@ -14,8 +14,12 @@ class GitIncludeMacro < Asciidoctor::Extensions::IncludeProcessor
     repository = attributes.fetch('repository', '.')
     revision = attributes.fetch('revision', 'HEAD')
     lines = attributes.fetch('lines', '')
+    asDiff = attributes.value?('diff')
 
     cmd = %(git -C #{repository} show #{revision}:#{target})
+    if (asDiff)
+      cmd = %(git -C #{repository} diff #{revision}~1:#{target} #{revision}:#{target})
+    end
     content = %x(#{cmd})
 
     content = process_line_selection(content, lines) unless lines == ""

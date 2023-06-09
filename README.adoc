@@ -11,6 +11,8 @@ endif::[]
 An AsciiDoctor extension that enables file includes from Git repositories.
 It only affects `include` directives for URIs beginning with `git@`.
 
+The extension can be used to include code examples from specific revisions in a git repository.
+
 == Requirements
 
 `git` command is available in `PATH`.
@@ -36,6 +38,7 @@ Then, inside your AsciiDoc file, use an `include` statement like normal, pointin
 * `repository` - path to the Git repository (default: `.`)
 * `revision` - repository revision to use (default: `HEAD`)
 * `lines` - specify the lines to include (i.e. `lines=2..5;10;12`)
+* `diff` - include a patch for the given revision
 
 // tag::examples[]
 
@@ -79,6 +82,12 @@ Paths within the repository work as usual:
 
 ----
 \include::git@README.adoc[lines=2..5;10;12]
+----
+
+=== Including a patch for a specific revision
+
+----
+\include::git@path/within/repo/file.rb[revision=b015e8dd,diff]
 ----
 
 // end::examples[]
