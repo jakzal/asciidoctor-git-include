@@ -1,0 +1,70 @@
+= Examples for AsciiDoctor Git includes extension
+Jakub Zalas <jakub@zalas.pl>
+v1.2.0
+:doctype: book
+:toc:
+:toclevels: 1
+:data-uri:
+:source-highlighter: rouge
+
+== Building this page
+
+Clone the repository.
+
+[source,bash]
+----
+git clone https://github.com/jakzal/asciidoctor-git-include.git
+cd asciidoctor-git-include
+----
+
+Next, choose wether you'd like to use Docker or build the gem directly on your OS.
+Continue with one of the sections that follow.
+
+=== Docker
+
+. Build the Docker image with the `asciidoctor-git-include` extension.
+The `docker build` command should be run at the top level directory of this project.
++
+.Building the Docker image
+[source,bash]
+----
+docker build -t jakzal/asciidoctor .
+----
+. Build the page.
++
+.Building the page with Docker
+[source,bash]
+----
+docker run -t --rm --name docs -v $(pwd):/project -w /project jakzal/asciidoctor \
+    asciidoctor -r asciidoctor-git-include examples/index.adoc -o examples/index.html
+----
+
+. Open the generated `examples/index.html` in a browser.
+
+=== Gem
+
+. Install asciidoctor on your system.
++
+[source,bash]
+----
+gem install asciidoctor rouge
+----
+
+. Build the extension gem and install it on your system.
++
+.Building and installing the gem
+[source,bash]
+----
+gem build asciidoctor-git-include.gemspec
+gem install asciidoctor-git-include-*.gem
+----
+
+. Build the page
++
+.Building the page with asciidoctor
+[source,bash]
+----
+asciidoctor -r asciidoctor-git-include examples/index.adoc -o examples/index.html
+----
+
+. Open the generated `examples/index.html` in a browser.
