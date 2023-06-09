@@ -1,5 +1,5 @@
 = Examples for AsciiDoctor Git includes extension
-Jakub Zalas <jakub@zalas.pl>
+Jakub Zalas
 v1.0.0
 :doctype: book
 :toc:
