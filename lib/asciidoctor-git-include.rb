@@ -16,10 +16,11 @@ class GitIncludeMacro < Asciidoctor::Extensions::IncludeProcessor
     lines = attributes.fetch('lines', '')
     as_diff = attributes.value?('diff') || attributes.key?('diff')
     diff_revision = attributes.fetch('diff', "#{revision}~1")
+    target_before = attributes.fetch('difftarget', target)
 
     cmd = %(git -C #{repository} show #{revision}:#{target})
     if (as_diff)
-      cmd = %(git -C #{repository} diff #{diff_revision}:#{target} #{revision}:#{target})
+      cmd = %(git -C #{repository} diff #{diff_revision}:#{target_before} #{revision}:#{target})
     end
     content = %x(#{cmd})
 
