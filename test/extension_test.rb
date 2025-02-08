@@ -117,6 +117,18 @@ include::git@test/fixtures/file-after-rename.adoc[revision=28c4082,diff=6d5eaf1,
       assert_match(/-Contents before rename./, output)
       assert_match(/\+Contents after rename./, output)
     end
+    
+    test 'it includes a diff ignoring whitespaces and caret returns' do
+      input = <<-EOS
+include::git@test/fixtures/lots_of_whitespaces.adoc[revision=e80ca3c,diff=2c2f9a9,ignorewhitespaces]
+      EOS
+
+      output = render_embedded_string input
+
+      assert_match(/diff --git a\/test\/fixtures\/lots_of_whitespaces.adoc b\/test\/fixtures\/lots_of_whitespaces.adoc/, output)
+      assert_match(/-Another line with more content/, output)
+      assert_match(/\+Another line with more content that has changed/, output)
+      refute_match(/-Some line with some content/, output)
   end
 
   def given_file_committed_to_fresh_repo(file_name, content)

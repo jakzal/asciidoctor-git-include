@@ -17,10 +17,11 @@ class GitIncludeMacro < Asciidoctor::Extensions::IncludeProcessor
     as_diff = attributes.value?('diff') || attributes.key?('diff')
     diff_revision = attributes.fetch('diff', "#{revision}~1")
     target_before = attributes.fetch('difftarget', target)
+    ignore_whitespaces_option = attributes.value?('ignorewhitespaces') || attributes.key?('ignorewhitespaces') ? '--ignore-cr-at-eol --ignore-space-at-eol -w -b --ignore-blank-lines' : ''
 
     cmd = %(git -C #{repository} show #{revision}:#{target})
     if (as_diff)
-      cmd = %(git -C #{repository} diff #{diff_revision}:#{target_before} #{revision}:#{target})
+      cmd = %(git -C #{repository} diff #{ignore_whitespaces_option} #{diff_revision}:#{target_before} #{revision}:#{target})
     end
     content = %x(#{cmd})
 
