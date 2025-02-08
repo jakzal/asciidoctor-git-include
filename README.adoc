@@ -39,6 +39,7 @@ Then, inside your AsciiDoc file, use an `include` statement like normal, pointin
 * `revision` - repository revision to use (default: `HEAD`)
 * `lines` - specify the lines to include (i.e. `lines=2..5;10;12`)
 * `diff` - include a patch for the given `revision`, or between two revisions (see examples)
+* `difftarget` - tell what the path of the target was before the changes (in case the target file was renamed)
 * `ignorewhitespaces` - whether to ignore whitespaces and newlines changes in an included patch
 
 // tag::examples[]
@@ -103,6 +104,13 @@ To generate a patch for changes between two revisions (b015e8dd and b015e8dd):
 ----
 \include::git@path/within/repo/file.rb[revision=b015e8dd,diff=0245ac72]
 ----
+
+=== Including a patch of a file that has been renamed
+
+To generate a patch for changes between two revisions (b015e8dd and b015e8dd) where a file has been renamed:
+
+----
+\include::git@path/within/repo/file.rb[revision=b015e8dd,diff=0245ac72,difftarget=path/within/repo/previous_file.rb]
 
 === Including a patch ignoring whitespaces
 

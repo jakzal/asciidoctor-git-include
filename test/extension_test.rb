@@ -106,6 +106,18 @@ include::git@test/fixtures/ruby.rb[revision=890064c2ee5310fdc4ffec0cffa0e41a258e
       assert_match(/\+messages = \["Hello", "World", "!!!"\]/, output)
     end
 
+    test 'it includes a diff for specific revisions of a file that is renamed' do
+      input = <<-EOS
+include::git@test/fixtures/file-after-rename.adoc[revision=28c4082,diff=6d5eaf1,difftarget=test/fixtures/file-before-rename.adoc]
+      EOS
+
+      output = render_embedded_string input
+
+      assert_match(/diff --git a\/test\/fixtures\/file-before-rename.adoc b\/test\/fixtures\/file-after-rename.adoc/, output)
+      assert_match(/-Contents before rename./, output)
+      assert_match(/\+Contents after rename./, output)
+    end
+    
     test 'it includes a diff ignoring whitespaces and caret returns' do
       input = <<-EOS
 include::git@test/fixtures/lots_of_whitespaces.adoc[revision=e80ca3c,diff=2c2f9a9,ignorewhitespaces]
