@@ -129,6 +129,7 @@ include::git@test/fixtures/lots_of_whitespaces.adoc[revision=e80ca3c,diff=2c2f9a
       assert_match(/-Another line with more content/, output)
       assert_match(/\+Another line with more content that has changed/, output)
       refute_match(/-Some line with some content/, output)
+    end
   end
 
   def given_file_committed_to_fresh_repo(file_name, content)
