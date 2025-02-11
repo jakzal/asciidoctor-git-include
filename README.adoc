@@ -111,6 +111,7 @@ To generate a patch for changes between two revisions (b015e8dd and b015e8dd) wh
 
 ----
 \include::git@path/within/repo/file.rb[revision=b015e8dd,diff=0245ac72,difftarget=path/within/repo/previous_file.rb]
+----
 
 === Including a patch ignoring whitespaces
 
